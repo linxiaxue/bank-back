@@ -3,6 +3,6 @@ spring:
   datasource:
     username: root
     password: lxx0401.
-    url: jdbc:mysql://localhost:3306/bank
+    url: jdbc:mysql://3.215.48.48:3306/bank
     driver-class-name: com.mysql.cj.jdbc.Driver
 
