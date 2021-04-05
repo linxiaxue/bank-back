@@ -1,6 +1,7 @@
 package com.bank.bank.service;
 
 import com.bank.bank.entity.FinanceProduct;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface FinanceProductService extends IService<FinanceProduct> {
 
+    Page<FinanceProduct> getProducts();
 }

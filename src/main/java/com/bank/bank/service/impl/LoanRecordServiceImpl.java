@@ -3,6 +3,7 @@ package com.bank.bank.service.impl;
 import com.bank.bank.entity.LoanRecord;
 import com.bank.bank.mapper.LoanRecordMapper;
 import com.bank.bank.service.LoanRecordService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRecord> implements LoanRecordService {
 
+    @Override
+    public Page<LoanRecord> getByUserId(Long id) {
+        return null;
+    }
 }

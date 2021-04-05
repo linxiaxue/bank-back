@@ -1,6 +1,7 @@
 package com.bank.bank.service;
 
 import com.bank.bank.entity.LoanRecord;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LoanRecordService extends IService<LoanRecord> {
 
+    Page<LoanRecord> getByUserId(Long id);
 }
