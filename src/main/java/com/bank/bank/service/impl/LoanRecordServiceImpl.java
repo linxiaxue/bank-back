@@ -171,9 +171,19 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         QueryWrapper<Account> accountQueryWrapper=new QueryWrapper<>();
         accountQueryWrapper.eq("id",clientid);
         Account account1=accountMapper.selectOne(accountQueryWrapper);
+        double balance=account1.getBalance();
         double past_loan_amount=account1.getLoanAmount();
         double current_loan_amount=past_loan_amount-currentAccount;
         account.setLoanAmount(current_loan_amount);
+        if(balance-current_loan_amount>500000){
+            account.setCreditRate(3);
+        }
+        else if(balance>=current_loan_amount){
+            account.setCreditRate(2);
+        }
+        else {
+            account.setCreditRate(1);
+        }
 
         int ret=accountMapper.update(account,accountUpdateWrapper);
         return ret;

@@ -45,6 +45,14 @@ public class Account implements Serializable {
     @ApiModelProperty(value = "信用等级")
     private Integer creditRate;
 
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     public Double getLoanAmount() {
         return loanAmount;
     }
