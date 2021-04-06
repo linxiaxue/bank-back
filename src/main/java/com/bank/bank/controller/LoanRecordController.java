@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,6 +89,16 @@ public class LoanRecordController {
         return ResponseEntity.ok(loanRecordService.repay(id,account));
     }
 
+    /**
+     * 更新新的一天
+     * @param date
+     * @return
+     */
+    @PostMapping(value = "/updateDate")
+    @ApiOperation(value = "更新到新的一天")
+    public ResponseEntity<Integer> updateDate(@RequestParam("date")@ApiParam(value = "现在到时间 ")Date date){
+        return ResponseEntity.ok(loanRecordService.updateDate(date));
+    }
 
 
 

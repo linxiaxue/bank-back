@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WaterLogService extends IService<WaterLog> {
 
+    public Integer createWaterLog(Integer clientid,String account_change,Integer type);
 }

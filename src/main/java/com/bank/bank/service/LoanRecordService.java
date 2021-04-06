@@ -4,6 +4,7 @@ import com.bank.bank.entity.LoanRecord;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.models.auth.In;
+import java.util.Date;
 
 import java.util.List;
 
@@ -22,5 +23,6 @@ public interface LoanRecordService extends IService<LoanRecord> {
     Integer freeFine(Integer id);
     Integer repayTotal(Integer id);
     Integer repay(Integer id,Double account);
+    Integer updateDate(Date date);
 
 }

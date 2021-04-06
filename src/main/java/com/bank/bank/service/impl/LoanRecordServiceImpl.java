@@ -6,7 +6,9 @@ import com.bank.bank.entity.WaterLog;
 import com.bank.bank.mapper.AccountMapper;
 import com.bank.bank.mapper.LoanRecordMapper;
 import com.bank.bank.mapper.WaterLogMapper;
+import com.bank.bank.service.AccountService;
 import com.bank.bank.service.LoanRecordService;
+import com.bank.bank.service.WaterLogService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -15,8 +17,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
 
 /**
  * <p>
@@ -37,6 +42,12 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
 
     @Autowired
     private AccountMapper accountMapper;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private WaterLogService waterLogService;
 
     @Override
     public List<LoanRecord> getByUserId(Integer id) {
@@ -80,7 +91,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
 
             //waterLog.setId(1);
             String str="-"+fine;
-            createWaterLog(clientid,str,2);
+            waterLogService.createWaterLog(clientid,str,2);
 
         }
         return ret;
@@ -108,8 +119,8 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         int ret=loanRecordMapper.update(loanRecord,loan);
         if(ret>0){
             String str="-"+currentAccount;
-            createWaterLog(clientid,str,1);
-            updateAccountLoad(clientid,currentAccount);
+            waterLogService.createWaterLog(clientid,str,1);
+            accountService.reduceAccountLoad(clientid,currentAccount);
 
         }
         return ret;
@@ -144,48 +155,59 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
 
             String str="-"+account;
 
-            createWaterLog(clientid,str,1);
-            updateAccountLoad(clientid,account);
+            waterLogService.createWaterLog(clientid,str,1);
+            accountService.reduceAccountLoad(clientid,account);
 
         }
         return ret;
 
     }
-    public int createWaterLog(Integer clientid,String account_change,Integer type){
-        WaterLog waterLog=new WaterLog();
-        waterLog.setId(sum);
-        sum++;
+    @Override
+    public Integer updateDate(Date date){
+        QueryWrapper<LoanRecord> loanRecordQueryWrapper=new QueryWrapper<>();
+        loanRecordQueryWrapper.eq("status",0);
+        List<LoanRecord> loanRecord=loanRecordMapper.selectList(loanRecordQueryWrapper);
+        SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
-        waterLog.setAccountChange(account_change);
-        waterLog.setClientId(clientid);
-        Date date=new Date();
-        waterLog.setCreateTime(date.toString());
-        waterLog.setType(type);
-        int result=waterLogMapper.insert(waterLog);
-        return result;
+        for(LoanRecord loanRecord1:loanRecord){
+            try{
+                Date dueDate = sdf1.parse(loanRecord1.getExpirationTime());
+                if(dueDate.before(date)){
+                    double fine=loanRecord1.getCurrentAccount()*0.05;
+                    Account account=accountService.getAccountById(loanRecord1.getClientId());
+                    if(account.getBalance()>=fine){
+                        accountService.reduceAccountBalance(loanRecord1.getClientId(),fine);
+                        String str="-"+fine;
+                        waterLogService.createWaterLog(loanRecord1.getClientId(),str,2);
+                        if(account.getBalance()-fine>=loanRecord1.getCurrentAccount()){
+                            accountService.reduceAccountBalance(loanRecord1.getClientId(),loanRecord1.getCurrentAccount());
+                            repayTotal(loanRecord1.getClientId());
+                        }
+
+                    }
+                    else{
+                        updateLoanFine(loanRecord1.getId(),fine);
+                    }
+                }
+            }catch (Exception e){
+                System.out.println(e);
+                return -1;
+            }
+
+
+
+        }
+        return 1;
     }
-    public int updateAccountLoad(Integer clientid,double currentAccount){
-        UpdateWrapper<Account> accountUpdateWrapper=new UpdateWrapper<>();
-        accountUpdateWrapper.eq("id",clientid);
-        Account account=new Account();
-        QueryWrapper<Account> accountQueryWrapper=new QueryWrapper<>();
-        accountQueryWrapper.eq("id",clientid);
-        Account account1=accountMapper.selectOne(accountQueryWrapper);
-        double balance=account1.getBalance();
-        double past_loan_amount=account1.getLoanAmount();
-        double current_loan_amount=past_loan_amount-currentAccount;
-        account.setLoanAmount(current_loan_amount);
-        if(balance-current_loan_amount>500000){
-            account.setCreditRate(3);
-        }
-        else if(balance>=current_loan_amount){
-            account.setCreditRate(2);
-        }
-        else {
-            account.setCreditRate(1);
-        }
 
-        int ret=accountMapper.update(account,accountUpdateWrapper);
+
+
+    public int updateLoanFine(Integer id,double fine){
+        UpdateWrapper<LoanRecord> loanRecordUpdateWrapper=new UpdateWrapper<>();
+        loanRecordUpdateWrapper.eq("id",id);
+        LoanRecord loanRecord=new LoanRecord();
+        loanRecord.setFine(fine);
+        int ret=loanRecordMapper.update(loanRecord,loanRecordUpdateWrapper);
         return ret;
     }
 

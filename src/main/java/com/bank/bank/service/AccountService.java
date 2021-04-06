@@ -14,4 +14,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface AccountService extends IService<Account> {
 
     public Account getByIDN(Long idn);
+
+    public Account getAccountById(Integer clientid);
+    public int reduceAccountLoad(Integer clientid,double reducedAccount);
+    public int reduceAccountBalance(Integer clientid,double cost);
 }
