@@ -6,15 +6,18 @@ import com.bank.bank.entity.LoanRecord;
 import com.bank.bank.service.AccountService;
 import com.bank.bank.service.LoanRecordService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -36,9 +39,56 @@ public class LoanRecordController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/user/{id}")
     @ApiOperation(value = "按照用户id查询对应的贷款记录")
-    public Page<LoanRecord> findByIDN(@PathVariable(value = "id")@ApiParam(value = "用户id") Long id){
-        return loanRecordService.getByUserId(id);
+    public ResponseEntity<List<LoanRecord>> findByUserID(@PathVariable(value = "id")@ApiParam(value = "用户id") Integer id){
+        return ResponseEntity.ok(loanRecordService.getByUserId(id));
     }
+    /**
+     * 按照贷款id查询对应的贷款记录
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/loan/{id}")
+    @ApiOperation(value = "按照贷款id查询对应的贷款记录")
+    public ResponseEntity<LoanRecord> findByID(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
+        return ResponseEntity.ok(loanRecordService.getById(id));
+    }
+    /**
+     * 清缴罚款
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/fine/{id}")
+    @ApiOperation(value = "按照贷款id缴清罚金")
+    public ResponseEntity<Integer> freeFine(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
+        return ResponseEntity.ok(loanRecordService.freeFine(id));
+    }
+
+    /**
+     * 全部还款
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/repay/{id}")
+    @ApiOperation(value = "按照贷款id全部还款")
+    public ResponseEntity<Integer> repayTotoal(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
+        return ResponseEntity.ok(loanRecordService.repayTotal(id));
+    }
+
+    /**
+     * 部分还款
+     * @param id,account
+     * @return
+     */
+
+    @PostMapping(value = "/repay")
+    @ApiOperation(value = "按照贷款id部分还款")
+    public ResponseEntity<Integer> repayTotoal(@RequestParam("id")@ApiParam(value = "贷款id") Integer id,@RequestParam("account") @ApiParam(value = "还款金额")Double account ){
+        return ResponseEntity.ok(loanRecordService.repay(id,account));
+    }
+
+
+
+
 }

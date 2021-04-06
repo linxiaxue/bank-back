@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author yuwen
@@ -57,6 +57,13 @@ public class Account implements Serializable {
     @ApiModelProperty(value = "年龄")
     private int age;
 
+    public Long getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(Long idNumber) {
+        this.idNumber = idNumber;
+    }
 
     @Override
     public String toString() {
