@@ -35,7 +35,7 @@ CREATE TABLE `account`  (
 -- ----------------------------
 -- Records of account
 -- ----------------------------
-INSERT INTO `account` VALUES (1, 1, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `account` VALUES (1, 1, 0, NULL, 800, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for client_product
@@ -83,7 +83,8 @@ CREATE TABLE `loan_record`  (
   `fine` double NOT NULL DEFAULT 0 COMMENT '罚金：0为无罚金或已还清',
   PRIMARY KEY (`id`, `fine`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
+INSERT into `loan_record` VALUES(1,2020-10-20,2020-11-3,0,1,400,400,0,0.05);
+INSERT into `loan_record` VALUES(2,2020-10-20,2020-11-4,0,1,400,400,0,0);
 -- ----------------------------
 -- Table structure for water_log
 -- ----------------------------

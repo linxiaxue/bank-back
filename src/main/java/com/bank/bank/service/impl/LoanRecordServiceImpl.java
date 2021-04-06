@@ -1,7 +1,9 @@
 package com.bank.bank.service.impl;
 
+import com.bank.bank.entity.Account;
 import com.bank.bank.entity.LoanRecord;
 import com.bank.bank.entity.WaterLog;
+import com.bank.bank.mapper.AccountMapper;
 import com.bank.bank.mapper.LoanRecordMapper;
 import com.bank.bank.mapper.WaterLogMapper;
 import com.bank.bank.service.LoanRecordService;
@@ -26,12 +28,15 @@ import java.util.List;
  */
 @Service
 public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRecord> implements LoanRecordService {
-
+    int sum=1;
     @Autowired
     private LoanRecordMapper loanRecordMapper;
 
     @Autowired
     private WaterLogMapper waterLogMapper;
+
+    @Autowired
+    private AccountMapper accountMapper;
 
     @Override
     public List<LoanRecord> getByUserId(Integer id) {
@@ -54,9 +59,12 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
     @Override
     public Integer freeFine(Integer id){
         //查询id和罚金
+        System.out.println("now");
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
+        System.out.println(id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
+
         Integer clientid=loan1.getClientId();
         Double fine=loan1.getFine();
         if(fine==null||fine<=0){
@@ -69,14 +77,10 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         loan.eq("id",id).gt("fine",0.0);
         int ret=loanRecordMapper.update(loanRecord,loan);
         if(ret>0){
-            WaterLog waterLog=new WaterLog();
+
+            //waterLog.setId(1);
             String str="-"+fine;
-            waterLog.setAccountChange(str);
-            waterLog.setClientId(clientid);
-            Date date=new Date();
-            waterLog.setCreateTime(date.toString());
-            waterLog.setType(2);
-            int result=waterLogMapper.insert(waterLog);
+            createWaterLog(clientid,str,2);
 
         }
         return ret;
@@ -103,18 +107,14 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         loan.eq("id",id);
         int ret=loanRecordMapper.update(loanRecord,loan);
         if(ret>0){
-            WaterLog waterLog=new WaterLog();
             String str="-"+currentAccount;
-            waterLog.setAccountChange(str);
-            waterLog.setClientId(clientid);
-            Date date=new Date();
-            waterLog.setCreateTime(date.toString());
-            waterLog.setType(1);
-            int result=waterLogMapper.insert(waterLog);
+            createWaterLog(clientid,str,1);
+            updateAccountLoad(clientid,currentAccount);
 
         }
         return ret;
     }
+
     @Override
     public Integer repay(Integer id,Double account){
         //查询clientid和总金额
@@ -141,17 +141,42 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         loan.eq("id",id);
         int ret=loanRecordMapper.update(loanRecord,loan);
         if(ret>0){
-            WaterLog waterLog=new WaterLog();
+
             String str="-"+account;
-            waterLog.setAccountChange(str);
-            waterLog.setClientId(clientid);
-            Date date=new Date();
-            waterLog.setCreateTime(date.toString());
-            waterLog.setType(1);
-            int result=waterLogMapper.insert(waterLog);
+
+            createWaterLog(clientid,str,1);
+            updateAccountLoad(clientid,account);
 
         }
         return ret;
 
     }
+    public int createWaterLog(Integer clientid,String account_change,Integer type){
+        WaterLog waterLog=new WaterLog();
+        waterLog.setId(sum);
+        sum++;
+
+        waterLog.setAccountChange(account_change);
+        waterLog.setClientId(clientid);
+        Date date=new Date();
+        waterLog.setCreateTime(date.toString());
+        waterLog.setType(type);
+        int result=waterLogMapper.insert(waterLog);
+        return result;
+    }
+    public int updateAccountLoad(Integer clientid,double currentAccount){
+        UpdateWrapper<Account> accountUpdateWrapper=new UpdateWrapper<>();
+        accountUpdateWrapper.eq("id",clientid);
+        Account account=new Account();
+        QueryWrapper<Account> accountQueryWrapper=new QueryWrapper<>();
+        accountQueryWrapper.eq("id",clientid);
+        Account account1=accountMapper.selectOne(accountQueryWrapper);
+        double past_loan_amount=account1.getLoanAmount();
+        double current_loan_amount=past_loan_amount-currentAccount;
+        account.setLoanAmount(current_loan_amount);
+
+        int ret=accountMapper.update(account,accountUpdateWrapper);
+        return ret;
+    }
+
 }
