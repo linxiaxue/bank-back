@@ -29,9 +29,9 @@ public class FinanceProduct implements Serializable {
     private String name;
 
     /**
-     * 类型，0为定期，1为股票
+     * 类型，0为定期，1为股票,2为基金
      */
-    @ApiModelProperty(value = "类型，0为定期，1为股票")
+    @ApiModelProperty(value = "类型，0为定期，1为股票,2为基金")
     private Integer type;
 
     /**

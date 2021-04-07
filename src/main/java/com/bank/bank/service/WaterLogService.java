@@ -1,7 +1,11 @@
 package com.bank.bank.service;
 
 import com.bank.bank.entity.WaterLog;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.data.domain.PageRequest;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,5 +17,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WaterLogService extends IService<WaterLog> {
 
-    public Integer createWaterLog(Integer clientid,String account_change,Integer type);
+    void createWaterLog(Integer clientid, String accountChange, Integer type);
+
+    List<WaterLog> getList(Integer clientId);
 }
+

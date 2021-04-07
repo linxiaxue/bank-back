@@ -1,8 +1,11 @@
 package com.bank.bank.service;
 
+import com.bank.bank.dto.ClientProductRequestDto;
 import com.bank.bank.entity.FinanceProduct;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface FinanceProductService extends IService<FinanceProduct> {
 
-    Page<FinanceProduct> getProducts();
+    List<FinanceProduct> getProducts();
+
+    List<FinanceProduct> getProById(Integer clientId);
+
+    String buyPro(ClientProductRequestDto clientProductRequestDto);
 }
