@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -44,6 +45,16 @@ public class Account implements Serializable {
      */
     @ApiModelProperty(value = "信用等级")
     private Integer creditRate;
+
+    /**
+     * 当前时间
+     * @return
+     */
+    @ApiModelProperty(value = "当前时间")
+    private Date nowDate;
+
+
+
 
     public Double getBalance() {
         return balance;

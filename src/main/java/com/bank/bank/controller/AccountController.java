@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.Response;
 
 /**
- * <p>
+ *
  *  账户接口
- * </p>
+ *
  *
  * @author yuwen
  * @since 2021-03-28
@@ -35,7 +35,7 @@ public class AccountController {
      * @param idn
      * @return
      */
-    @GetMapping(value = "/{idn}")
+    @GetMapping("/{idn}")
     @ApiOperation(value = "根据身份证查询账户")
     public ResponseEntity<Account> findByIDN(@PathVariable(value = "idn")@ApiParam(value = "身份证号") Long idn){
         return ResponseEntity.ok(accountService.getByIDN(idn));
@@ -44,10 +44,20 @@ public class AccountController {
     /**
      * 新增账户
      */
-    @PostMapping(value = "create")
+    @PostMapping( "/create")
     @ApiOperation(value = "新增账户")
-    public ResponseEntity create(@RequestBody AccountDto accountDto){
+    public ResponseEntity<String> create(@RequestBody AccountDto accountDto){
+        accountService.create(accountDto);
         return ResponseEntity.ok("新增账户成功");
+    }
+
+    /**
+     * 存款
+     */
+    @GetMapping("/{id}/{money}")
+    @ApiOperation(value = "存款")
+    public ResponseEntity<String> deposit(@PathVariable(value = "id") Integer id,@PathVariable(value = "money") Double money){
+        return ResponseEntity.ok(accountService.deposit(id,money));
     }
 
 

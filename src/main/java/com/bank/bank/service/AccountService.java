@@ -1,7 +1,11 @@
 package com.bank.bank.service;
 
+import com.bank.bank.dto.AccountDto;
 import com.bank.bank.entity.Account;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import javax.transaction.Transactional;
+import java.util.Date;
 
 /**
  * <p>
@@ -13,9 +17,23 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface AccountService extends IService<Account> {
 
-    public Account getByIDN(Long idn);
+    Account getByIDN(Long idn);
 
-    public Account getAccountById(Integer clientid);
-    public int reduceAccountLoad(Integer clientid,double reducedAccount);
-    public int reduceAccountBalance(Integer clientid,double cost);
+    Account getAccountById(Integer clientid);
+
+    @Transactional
+    int reduceAccountLoad(Integer clientid,double reducedAccount);
+
+    @Transactional
+    int reduceAccountBalance(Integer clientid,double cost);
+
+    void create(AccountDto accountDto);
+
+    Date getNowTime();
+
+    @Transactional
+    String addTime();
+
+    @Transactional
+    String deposit(Integer id,Double money);
 }

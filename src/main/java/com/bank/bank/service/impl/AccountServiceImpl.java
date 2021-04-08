@@ -1,14 +1,20 @@
 package com.bank.bank.service.impl;
 
+import com.bank.bank.dto.AccountDto;
 import com.bank.bank.entity.Account;
 import com.bank.bank.mapper.AccountMapper;
 import com.bank.bank.service.AccountService;
+import com.bank.bank.service.ClientProductService;
+import com.bank.bank.service.LoanRecordService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * <p>
@@ -20,8 +26,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements AccountService {
+
     @Autowired
+    private LoanRecordService loanRecordService;
+
+    @Autowired
+    private ClientProductService clientProductService;
+
     private AccountMapper accountMapper;
+
     @Override
     public Account getByIDN(Long idn){
         LambdaQueryWrapper<Account> wrapper = new LambdaQueryWrapper<>();
@@ -29,6 +42,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
         return getOne(wrapper);
     }
+
     @Override
     public Account getAccountById(Integer clientid){
         QueryWrapper<Account> accountQueryWrapper=new QueryWrapper<>();
@@ -36,6 +50,17 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         Account account=accountMapper.selectOne(accountQueryWrapper);
         return account;
     }
+
+
+    @Override
+    public void create(AccountDto accountDto){
+        Account account = new Account();
+        account.setAge(accountDto.getAge());
+        account.setBalance(accountDto.getBalance());
+        account.setCreditRate(accountDto.getCreditRate());
+        saveOrUpdate(account);
+    }
+
     @Override
     public int reduceAccountLoad(Integer clientid,double reducedAccount){
         UpdateWrapper<Account> accountUpdateWrapper=new UpdateWrapper<>();
@@ -61,6 +86,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         int ret=accountMapper.update(account,accountUpdateWrapper);
         return ret;
     }
+
     @Override
     public int reduceAccountBalance(Integer clientid,double cost){
         UpdateWrapper<Account> accountUpdateWrapper=new UpdateWrapper<>();
@@ -89,5 +115,39 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
         int ret=accountMapper.update(account,accountUpdateWrapper);
         return ret;
+    }
+
+    @Override
+    public Date getNowTime(){
+        Account account1 = getById(1);
+        return account1.getNowDate();
+    }
+
+    @Override
+    public String addTime(){
+        //更新一天
+        Account account1 = getById(1);
+        Date date = account1.getNowDate();
+        Calendar cld = Calendar.getInstance();
+        cld.setTime(date);
+        cld.add(Calendar.DATE, 1);
+        Date dateNew = cld.getTime();
+        account1.setNowDate(dateNew);
+        saveOrUpdate(account1);
+
+        loanRecordService.updateDate(dateNew);
+        clientProductService.computeBenefit();
+
+        return "日期更新成功";
+
+
+    }
+
+    @Override
+    public String deposit(Integer id, Double money){
+        Account account = getById(id);
+        account.setBalance(account.getBalance() + money);
+        saveOrUpdate(account);
+        return "存款成功";
     }
 }
