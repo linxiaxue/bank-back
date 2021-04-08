@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -33,16 +34,14 @@ import java.util.SimpleTimeZone;
  */
 @Service
 public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRecord> implements LoanRecordService {
-    int sum=1;
-    @Autowired
+
     private LoanRecordMapper loanRecordMapper;
 
-    @Autowired
     private WaterLogMapper waterLogMapper;
 
-    @Autowired
     private AccountMapper accountMapper;
 
+    @Lazy
     @Autowired
     private AccountService accountService;
 
@@ -144,7 +143,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         }
         LoanRecord loanRecord=new LoanRecord();
         loanRecord.setCurrentAccount(currentAccount-account);
-        if(currentAccount==account){
+        if(currentAccount.equals(account)){
             loanRecord.setStatus(1);
         }
 

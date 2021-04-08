@@ -21,9 +21,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * <p>
+ *
  *  贷款记录
- * </p>
+ *
  *
  * @author yuwen
  * @since 2021-03-28
@@ -40,7 +40,7 @@ public class LoanRecordController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/user/{id}")
+    @GetMapping( "/user/{id}")
     @ApiOperation(value = "按照用户id查询对应的贷款记录")
     public ResponseEntity<List<LoanRecord>> findByUserID(@PathVariable(value = "id")@ApiParam(value = "用户id") Integer id){
         return ResponseEntity.ok(loanRecordService.getByUserId(id));
@@ -50,7 +50,7 @@ public class LoanRecordController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/loan/{id}")
+    @GetMapping( "/loan/{id}")
     @ApiOperation(value = "按照贷款id查询对应的贷款记录")
     public ResponseEntity<LoanRecord> findByID(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
         return ResponseEntity.ok(loanRecordService.getById(id));
@@ -60,7 +60,7 @@ public class LoanRecordController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/fine/{id}")
+    @GetMapping( "/fine/{id}")
     @ApiOperation(value = "按照贷款id缴清罚金")
     public ResponseEntity<Integer> freeFine(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
         return ResponseEntity.ok(loanRecordService.freeFine(id));
@@ -71,7 +71,7 @@ public class LoanRecordController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/repay/{id}")
+    @GetMapping( "/repay/{id}")
     @ApiOperation(value = "按照贷款id全部还款")
     public ResponseEntity<Integer> repayTotoal(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
         return ResponseEntity.ok(loanRecordService.repayTotal(id));
@@ -83,7 +83,7 @@ public class LoanRecordController {
      * @return
      */
 
-    @PostMapping(value = "/repay")
+    @PostMapping( "/repay")
     @ApiOperation(value = "按照贷款id部分还款")
     public ResponseEntity<Integer> repayTotoal(@RequestParam("id")@ApiParam(value = "贷款id") Integer id,@RequestParam("account") @ApiParam(value = "还款金额")Double account ){
         return ResponseEntity.ok(loanRecordService.repay(id,account));
@@ -94,7 +94,7 @@ public class LoanRecordController {
      * @param date
      * @return
      */
-    @PostMapping(value = "/updateDate")
+    @PostMapping( "/updateDate")
     @ApiOperation(value = "更新到新的一天")
     public ResponseEntity<Integer> updateDate(@RequestParam("date")@ApiParam(value = "现在到时间 ")Date date){
         return ResponseEntity.ok(loanRecordService.updateDate(date));
