@@ -38,18 +38,30 @@ public class FinanceProductController {
         return financeProductService.getProducts();
     }
 
-    @GetMapping("/{id}")
+    /**
+     * 根据用户id查看可购买的产品列表
+     * @param cid
+     * @return
+     */
+    @GetMapping("/{cid}")
     @ApiOperation(value = "根据用户id查看可购买的产品列表")
-    public List<FinanceProduct> getProById(@PathVariable(value = "id") Integer clientId){
-        return financeProductService.getProById(clientId);
+    public List<FinanceProduct> getProByCId(@PathVariable(value = "cid") Integer cid){
+        return financeProductService.getProById(cid);
     }
 
+    /**
+     * 用户购买理财产品
+     * @param clientProductRequestDto
+     * @return
+     */
     @GetMapping("/buyProduct")
     @ApiOperation(value = "用户购买理财产品")
-    public ResponseEntity buyPro(@RequestBody ClientProductRequestDto clientProductRequestDto){
+    public ResponseEntity<String> buyPro(@RequestBody ClientProductRequestDto clientProductRequestDto){
         return ResponseEntity.ok(financeProductService.buyPro(clientProductRequestDto));
 
     }
+
+
 
 
 }

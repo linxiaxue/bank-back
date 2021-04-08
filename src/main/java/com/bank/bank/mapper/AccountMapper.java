@@ -12,7 +12,7 @@ import org.mapstruct.Mapper;
  * @author yuwen
  * @since 2021-03-28
  */
-
+@Mapper
 public interface AccountMapper extends BaseMapper<Account> {
 
 }

@@ -4,6 +4,7 @@ import com.bank.bank.dto.ClientProductRequestDto;
 import com.bank.bank.entity.Account;
 import com.bank.bank.entity.ClientProduct;
 import com.bank.bank.entity.FinanceProduct;
+import com.bank.bank.exception.BalanceNotEnoughException;
 import com.bank.bank.mapper.AccountMapper;
 import com.bank.bank.mapper.ClientProductMapper;
 import com.bank.bank.mapper.FinanceProductMapper;
@@ -74,6 +75,7 @@ public class FinanceProductServiceImpl extends ServiceImpl<FinanceProductMapper,
     public String buyPro(ClientProductRequestDto clientProductRequestDto){
         String re = "";
 
+        //要交罚金
         if(loanRecordService.freeFine(clientProductRequestDto.getClientId()) > 0){
             Account account = accountService.getById(clientProductRequestDto.getClientId());
             FinanceProduct financeProduct = getById(clientProductRequestDto.getFpdId());
@@ -92,13 +94,15 @@ public class FinanceProductServiceImpl extends ServiceImpl<FinanceProductMapper,
                 re = "购买成功";
 
             }else {
-                //            throw new Exception("余额不足")
+                throw new BalanceNotEnoughException();
 
             }
         }else {
-            //            throw new Exception("余额不足")
+            throw new BalanceNotEnoughException();
 
         }
         return re;
     }
+
+
 }

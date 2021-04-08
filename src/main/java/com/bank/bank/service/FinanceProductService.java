@@ -5,6 +5,7 @@ import com.bank.bank.entity.FinanceProduct;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -21,5 +22,8 @@ public interface FinanceProductService extends IService<FinanceProduct> {
 
     List<FinanceProduct> getProById(Integer clientId);
 
+    @Transactional
     String buyPro(ClientProductRequestDto clientProductRequestDto);
+
+
 }
