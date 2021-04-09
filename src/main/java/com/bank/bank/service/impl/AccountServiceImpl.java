@@ -33,6 +33,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     @Autowired
     private ClientProductService clientProductService;
 
+    @Autowired
     private AccountMapper accountMapper;
 
     @Override
@@ -58,6 +59,11 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         account.setAge(accountDto.getAge());
         account.setBalance(accountDto.getBalance());
         account.setCreditRate(accountDto.getCreditRate());
+        account.setIdNumber(accountDto.getIdNumber());
+        account.setBalance(0.0);
+        account.setCreditRate(1);
+        account.setLoanAmount(0.0);
+        account.setName(account.getName());
         saveOrUpdate(account);
     }
 
@@ -124,7 +130,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     }
 
     @Override
-    public String addTime(){
+    public String addTime() {
         //更新一天
         Account account1 = getById(1);
         Date date = account1.getNowDate();
@@ -135,7 +141,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         account1.setNowDate(dateNew);
         saveOrUpdate(account1);
 
-        loanRecordService.updateDate(dateNew);
+        if(loanRecordService.updateDate(dateNew) == -1){
+            throw new RuntimeException();
+        }
         clientProductService.computeBenefit();
 
         return "日期更新成功";

@@ -57,7 +57,6 @@ public class WaterLogServiceImpl extends ServiceImpl<WaterLogMapper, WaterLog> i
         waterLog.setCreateTime(date.toString());
         waterLog.setType(type);
         saveOrUpdate(waterLog);
-
     }
 
     @Override

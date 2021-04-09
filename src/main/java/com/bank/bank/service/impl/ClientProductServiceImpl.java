@@ -7,6 +7,7 @@ import com.bank.bank.service.ClientProductService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.List;
 @Service
 public class ClientProductServiceImpl extends ServiceImpl<ClientProductMapper, ClientProduct> implements ClientProductService {
 
+    @Autowired
     private ClientProductMapper clientProductMapper;
 
     @Override

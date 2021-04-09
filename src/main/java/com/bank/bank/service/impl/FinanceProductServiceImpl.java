@@ -42,10 +42,13 @@ public class FinanceProductServiceImpl extends ServiceImpl<FinanceProductMapper,
     @Autowired
     public ClientProductService clientProductService;
 
+    @Autowired
     public AccountMapper accountMapper;
 
+    @Autowired
     public FinanceProductMapper financeProductMapper;
 
+    @Autowired
     public ClientProductMapper clientProductMapper;
 
 

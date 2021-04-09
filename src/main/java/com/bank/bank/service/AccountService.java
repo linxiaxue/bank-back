@@ -3,8 +3,8 @@ package com.bank.bank.service;
 import com.bank.bank.dto.AccountDto;
 import com.bank.bank.entity.Account;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 
 /**
@@ -15,6 +15,7 @@ import java.util.Date;
  * @author yuwen
  * @since 2021-03-28
  */
+@Transactional(readOnly = true)
 public interface AccountService extends IService<Account> {
 
     Account getByIDN(Long idn);
@@ -31,9 +32,9 @@ public interface AccountService extends IService<Account> {
 
     Date getNowTime();
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     String addTime();
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     String deposit(Integer id,Double money);
 }

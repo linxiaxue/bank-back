@@ -20,7 +20,6 @@ import java.util.Date;
  */
 @Data
 @TableName("account")
-@ApiModel(value = "账户")
 public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;

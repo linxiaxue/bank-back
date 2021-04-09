@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -35,11 +36,8 @@ import java.util.SimpleTimeZone;
 @Service
 public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRecord> implements LoanRecordService {
 
+    @Autowired
     private LoanRecordMapper loanRecordMapper;
-
-    private WaterLogMapper waterLogMapper;
-
-    private AccountMapper accountMapper;
 
     @Lazy
     @Autowired
@@ -163,13 +161,13 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
     }
     @Override
     public Integer updateDate(Date date){
-        QueryWrapper<LoanRecord> loanRecordQueryWrapper=new QueryWrapper<>();
-        loanRecordQueryWrapper.eq("status",0);
+        LambdaQueryWrapper<LoanRecord> loanRecordQueryWrapper = new QueryWrapper<LoanRecord>().lambda();
+        loanRecordQueryWrapper.eq(LoanRecord::getStatus,0);
         List<LoanRecord> loanRecord=loanRecordMapper.selectList(loanRecordQueryWrapper);
         SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
         for(LoanRecord loanRecord1:loanRecord){
-            try{
+            try {
                 Date dueDate = sdf1.parse(loanRecord1.getExpirationTime());
                 if(dueDate.before(date)){
                     double fine=loanRecord1.getCurrentAccount()*0.05;
@@ -177,7 +175,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
                     if(account.getBalance()>=fine){
                         accountService.reduceAccountBalance(loanRecord1.getClientId(),fine);
                         String str="-"+fine;
-                        waterLogService.createWaterLog(loanRecord1.getClientId(),str,2);
+                        waterLogService.createWaterLog(account.getId(),str,2);
                         if(account.getBalance()-fine>=loanRecord1.getCurrentAccount()){
                             accountService.reduceAccountBalance(loanRecord1.getClientId(),loanRecord1.getCurrentAccount());
                             repayTotal(loanRecord1.getClientId());
