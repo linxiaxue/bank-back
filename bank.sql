@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account`  (
   `id` int(0) NOT NULL AUTO_INCREMENT,
   `id_number` bigint(0) NOT NULL COMMENT '身份证号',
-  `balance` double NOT NULL DEFAULT 0 COMMENT '余额',
+  `balance` decimal NOT NULL DEFAULT 0 COMMENT '余额',
   `credit_rate` int(0) NULL DEFAULT NULL COMMENT '信用等级',
-  `loan_amount` double NULL DEFAULT NULL COMMENT '贷款金额',
+  `loan_amount` decimal NULL DEFAULT NULL COMMENT '贷款金额',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名',
   `age` int(0) NULL DEFAULT NULL COMMENT '年龄',
   PRIMARY KEY (`id`) USING BTREE

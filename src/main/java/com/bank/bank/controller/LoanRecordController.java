@@ -62,8 +62,8 @@ public class LoanRecordController {
      */
     @GetMapping( "/fine/{id}")
     @ApiOperation(value = "按照贷款id缴清罚金")
-    public ResponseEntity<Integer> freeFine(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
-        return ResponseEntity.ok(loanRecordService.freeFine(id));
+    public ResponseEntity<String> freeFine(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
+        return ResponseEntity.ok(loanRecordService.freeFine(id) > 0 ? "罚金已缴清":"当前无罚金");
     }
 
     /**

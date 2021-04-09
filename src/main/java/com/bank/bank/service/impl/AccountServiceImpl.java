@@ -80,13 +80,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         double current_loan_amount=past_loan_amount-reducedAccount;
         account.setLoanAmount(current_loan_amount);
         if(balance-current_loan_amount>500000){
-            account.setCreditRate(3);
+            account.setCreditRate(1);
         }
         else if(balance>=current_loan_amount){
             account.setCreditRate(2);
         }
         else {
-            account.setCreditRate(1);
+            account.setCreditRate(3);
         }
 
         int ret=accountMapper.update(account,accountUpdateWrapper);
@@ -110,13 +110,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
         account.setBalance(current_balance);
         if(current_balance-loan_amount>500000){
-            account.setCreditRate(3);
+            account.setCreditRate(1);
         }
         else if(current_balance>=loan_amount){
             account.setCreditRate(2);
         }
         else {
-            account.setCreditRate(1);
+            account.setCreditRate(3);
         }
 
         int ret=accountMapper.update(account,accountUpdateWrapper);
@@ -158,4 +158,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         saveOrUpdate(account);
         return "存款成功";
     }
+
+
 }

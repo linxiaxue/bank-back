@@ -60,5 +60,11 @@ public class ClientProductResponseDto {
     @ApiModelProperty(value = "到期时间，对于定期")
     private String expirationTime;
 
+    /**
+     * 产品名称
+     */
+    @ApiModelProperty(value = "产品名称")
+    private String fpdName;
+
 
 }

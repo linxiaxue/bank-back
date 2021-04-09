@@ -79,16 +79,24 @@ public class FinanceProductServiceImpl extends ServiceImpl<FinanceProductMapper,
         String re = "";
 
         //要交罚金
-        if(loanRecordService.freeFine(clientProductRequestDto.getClientId()) > 0){
+        if(loanRecordService.freeFine(clientProductRequestDto.getClientId()) >= 0){
             Account account = accountService.getById(clientProductRequestDto.getClientId());
             FinanceProduct financeProduct = getById(clientProductRequestDto.getFpdId());
+            LambdaQueryWrapper<ClientProduct> wrapper = new QueryWrapper<ClientProduct>().lambda();
+            wrapper.eq(ClientProduct::getClientId,account.getId());
+            wrapper.eq(ClientProduct::getFpdId,financeProduct.getId());
+            ClientProduct clientProduct = clientProductMapper.selectOne(wrapper);
+            if(clientProduct == null){
+                clientProduct = new ClientProduct();
+                clientProduct.setPrincipal(0.0);
+            }
             if(account.getBalance() >= clientProductRequestDto.getPrincipal()){
                 accountService.reduceAccountBalance(clientProductRequestDto.getClientId(),clientProductRequestDto.getPrincipal());
-                ClientProduct clientProduct = new ClientProduct();
+
                 clientProduct.setBuyTime(new Date().toString());
                 clientProduct.setClientId(clientProductRequestDto.getClientId());
                 clientProduct.setFpdId(clientProductRequestDto.getFpdId());
-                clientProduct.setPrincipal(clientProductRequestDto.getPrincipal());
+                clientProduct.setPrincipal(clientProductRequestDto.getPrincipal() + clientProduct.getPrincipal());
                 clientProduct.setInterestRate(financeProduct.getInterestRate());
                 clientProduct.setType(financeProduct.getType());
                 clientProduct.setProfit(0.0);

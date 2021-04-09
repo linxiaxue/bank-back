@@ -1,10 +1,13 @@
 package com.bank.bank.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -20,6 +23,7 @@ public class FinanceProduct implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -43,7 +47,7 @@ public class FinanceProduct implements Serializable {
     /**
      * 日利率，单位为 %
      */
-    @ApiModelProperty(value = "日利率，%")
+    @ApiModelProperty(value = "日利率，小数形式")
     private Double interestRate;
 
     public Integer getId() {

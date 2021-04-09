@@ -47,7 +47,7 @@ public class WaterLog implements Serializable {
      * 备注
      */
     @ApiModelProperty(value = "备注")
-    private String desc;
+    private String remark;
 
     public Integer getId() {
         return id;
@@ -84,12 +84,12 @@ public class WaterLog implements Serializable {
     public void setType(Integer type) {
         this.type = type;
     }
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class WaterLog implements Serializable {
             ", clientId=" + clientId +
             ", accountChange=" + accountChange +
             ", type=" + type +
-            ", desc=" + desc +
+            ", desc=" + remark +
         "}";
     }
 }

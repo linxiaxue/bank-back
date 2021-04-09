@@ -3,6 +3,7 @@ package com.bank.bank.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Data
 @ApiModel("客户理财产品表请求对象")

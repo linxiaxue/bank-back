@@ -67,31 +67,28 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
     @Override
     public Integer freeFine(Integer id){
         //查询id和罚金
-        System.out.println("now");
+
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
-        System.out.println(id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
 
         Integer clientid=loan1.getClientId();
         Double fine=loan1.getFine();
-        if(fine==null||fine<=0){
-            return -1;
-        }
-        //更新
-        LoanRecord loanRecord=new LoanRecord();
-        loanRecord.setFine(0.0);
-        UpdateWrapper<LoanRecord> loan=new UpdateWrapper<>();
-        loan.eq("id",id).gt("fine",0.0);
-        int ret=loanRecordMapper.update(loanRecord,loan);
-        if(ret>0){
+        if(fine != null && fine > 0 ) {
 
-            //waterLog.setId(1);
-            String str="-"+fine;
-            waterLogService.createWaterLog(clientid,str,2);
+            //更新
+            loan1.setFine(0.0);
+            saveOrUpdate(loan1);
+            String str = "-" + fine;
+            accountService.reduceAccountBalance(clientid,fine);
+            waterLogService.createWaterLog(clientid, str, 2);
 
+            return 1;
+        }else if(fine == 0){
+            return 0;
+        }else {
+            return  -1;
         }
-        return ret;
 
 
     }
@@ -108,19 +105,16 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         }
         Integer clientid=loan1.getClientId();
         Double currentAccount=loan1.getCurrentAccount();
-        LoanRecord loanRecord=new LoanRecord();
-        loanRecord.setCurrentAccount(0.0);
-        loanRecord.setStatus(1);
-        UpdateWrapper<LoanRecord> loan=new UpdateWrapper<>();
-        loan.eq("id",id);
-        int ret=loanRecordMapper.update(loanRecord,loan);
-        if(ret>0){
-            String str="-"+currentAccount;
-            waterLogService.createWaterLog(clientid,str,1);
-            accountService.reduceAccountLoad(clientid,currentAccount);
+        loan1.setCurrentAccount(0.0);
+        loan1.setStatus(1);
+        saveOrUpdate(loan1);
 
-        }
-        return ret;
+        String str="-"+currentAccount;
+        waterLogService.createWaterLog(clientid,str,1);
+        accountService.reduceAccountLoad(clientid,currentAccount);
+
+
+        return 1;
     }
 
     @Override
@@ -178,7 +172,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
                         waterLogService.createWaterLog(account.getId(),str,2);
                         if(account.getBalance()-fine>=loanRecord1.getCurrentAccount()){
                             accountService.reduceAccountBalance(loanRecord1.getClientId(),loanRecord1.getCurrentAccount());
-                            repayTotal(loanRecord1.getClientId());
+                            repayTotal(loanRecord1.getId());
                         }
 
                     }

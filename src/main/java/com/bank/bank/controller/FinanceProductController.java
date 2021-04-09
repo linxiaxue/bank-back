@@ -54,7 +54,7 @@ public class FinanceProductController {
      * @param clientProductRequestDto
      * @return
      */
-    @GetMapping("/buyProduct")
+    @PostMapping("/buyProduct")
     @ApiOperation(value = "用户购买理财产品")
     public ResponseEntity<String> buyPro(@RequestBody ClientProductRequestDto clientProductRequestDto){
         return ResponseEntity.ok(financeProductService.buyPro(clientProductRequestDto));
