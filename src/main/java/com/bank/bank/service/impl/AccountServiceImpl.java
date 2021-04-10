@@ -2,6 +2,7 @@ package com.bank.bank.service.impl;
 
 import com.bank.bank.dto.AccountDto;
 import com.bank.bank.entity.Account;
+import com.bank.bank.exception.AccountNotExist;
 import com.bank.bank.mapper.AccountMapper;
 import com.bank.bank.service.AccountService;
 import com.bank.bank.service.ClientProductService;
@@ -40,8 +41,11 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     public Account getByIDN(Long idn){
         LambdaQueryWrapper<Account> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Account::getIdNumber,idn);
-
-        return getOne(wrapper);
+        Account account = getOne(wrapper);
+        if(account == null){
+            throw new AccountNotExist();
+        }
+        return account;
     }
 
     @Override
@@ -49,6 +53,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         QueryWrapper<Account> accountQueryWrapper=new QueryWrapper<>();
         accountQueryWrapper.eq("id",clientid);
         Account account=accountMapper.selectOne(accountQueryWrapper);
+        if(account == null){
+            throw new AccountNotExist();
+        }
         return account;
     }
 

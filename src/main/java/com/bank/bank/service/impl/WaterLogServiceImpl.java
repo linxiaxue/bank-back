@@ -66,4 +66,12 @@ public class WaterLogServiceImpl extends ServiceImpl<WaterLogMapper, WaterLog> i
         wrapper.eq(WaterLog::getClientId,clientId);
         return waterLogMapper.selectList(wrapper);
     }
+
+    @Override
+    public List<WaterLog> findByWID(Integer clientId,Integer wid){
+        LambdaQueryWrapper<WaterLog> wrapper = new QueryWrapper<WaterLog>().lambda();
+        wrapper.eq(WaterLog::getClientId,clientId);
+        wrapper.eq(WaterLog::getId,wid);
+        return waterLogMapper.selectList(wrapper);
+    }
 }

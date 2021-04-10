@@ -20,5 +20,9 @@ public interface WaterLogService extends IService<WaterLog> {
     void createWaterLog(Integer clientid, String accountChange, Integer type);
 
     List<WaterLog> getList(Integer clientId);
+
+    List<WaterLog> findByWID(Integer clientId,Integer wid);
+
+
 }
 

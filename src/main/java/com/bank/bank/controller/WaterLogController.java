@@ -39,5 +39,15 @@ public class WaterLogController {
         return waterLogService.getList(id);
     }
 
+    /**
+     * 查询账户流水
+     */
+    @GetMapping("/{id}/{wid}")
+    @ApiOperation("查询账户流水")
+    public List<WaterLog> findByWID(@PathVariable(value = "id")@ApiParam(value = "账户id" ) Integer id,
+                                  @PathVariable(value = "wid")@ApiParam(value = "流水id" ) Integer wid){
+        return waterLogService.findByWID(id,wid);
+    }
+
 
 }

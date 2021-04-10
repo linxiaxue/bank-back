@@ -12,7 +12,14 @@ import java.util.Map;
 @ControllerAdvice
 public class ControllerAdvisor {
     @ExceptionHandler(BalanceNotEnoughException.class)
-    ResponseEntity<?> handleUsernameNotFoundException(BalanceNotEnoughException ex) {
+    ResponseEntity<?> handleBalanceNotEnoughException(BalanceNotEnoughException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccountNotExist.class)
+    ResponseEntity<?> handleAccountNotExistException(AccountNotExist ex) {
         Map<String, String> response = new HashMap<>();
         response.put("message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
