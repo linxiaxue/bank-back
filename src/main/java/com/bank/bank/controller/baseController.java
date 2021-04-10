@@ -31,6 +31,10 @@ public class baseController {
         return ResponseEntity.ok(accountService.getNowTime());
     }
 
+    /**
+     * 增加一天
+     * @return
+     */
     @GetMapping("/addTime")
     @ApiOperation(value = "增加一天")
     public ResponseEntity<String> addTime(){
