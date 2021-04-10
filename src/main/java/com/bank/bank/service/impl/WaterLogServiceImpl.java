@@ -2,7 +2,9 @@ package com.bank.bank.service.impl;
 
 import com.bank.bank.entity.Account;
 import com.bank.bank.entity.WaterLog;
+import com.bank.bank.mapper.AccountMapper;
 import com.bank.bank.mapper.WaterLogMapper;
+import com.bank.bank.service.AccountService;
 import com.bank.bank.service.WaterLogService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -31,6 +33,9 @@ public class WaterLogServiceImpl extends ServiceImpl<WaterLogMapper, WaterLog> i
     @Autowired
     private WaterLogMapper waterLogMapper;
 
+    @Autowired
+    private AccountService accountService;
+
 //    private Integer getfirstWaterid(){
 //        try{
 //            QueryWrapper<WaterLog> waterLogQueryWrapper=new QueryWrapper<>();
@@ -54,7 +59,11 @@ public class WaterLogServiceImpl extends ServiceImpl<WaterLogMapper, WaterLog> i
         waterLog.setClientId(clientid);
         Date date=new Date();
 
-        waterLog.setCreateTime(date.toString());
+        Date nowDate=accountService.getNowTime();
+        String time=nowDate.getYear()+" "+nowDate.getMonth()+" "+nowDate.getDate()+" "+
+                date.getHours()+" : "+date.getMinutes()+" : "+date.getSeconds();
+
+        waterLog.setCreateTime(time);
         waterLog.setType(type);
         saveOrUpdate(waterLog);
 

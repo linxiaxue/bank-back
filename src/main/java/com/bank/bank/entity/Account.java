@@ -53,7 +53,13 @@ public class Account implements Serializable {
     private Date nowDate;
 
 
+    public Date getNowDate() {
+        return nowDate;
+    }
 
+    public void setNowDate(Date nowDate) {
+        this.nowDate = nowDate;
+    }
 
     public Double getBalance() {
         return balance;

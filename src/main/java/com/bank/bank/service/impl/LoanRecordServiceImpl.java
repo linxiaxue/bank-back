@@ -71,6 +71,8 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
+        if(loan1==null)
+            return -1;
 
         Integer clientid=loan1.getClientId();
         Double fine=loan1.getFine();
@@ -99,6 +101,8 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
+        if(loan1==null)
+            return -1;
         Double fine=loan1.getFine();
         if(fine==null||fine>0){
             return -1;
@@ -119,10 +123,15 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
 
     @Override
     public Integer repay(Integer id,Double account){
+        if(account<0){
+            return -1;
+        }
         //查询clientid和总金额
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
+        if(loan1==null)
+            return -1;
         Double fine=loan1.getFine();
         if(fine==null||fine>0){
             return -1;
@@ -154,7 +163,10 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
 
     }
     @Override
-    public Integer updateDate(Date date){
+    public Integer updateDate(){
+        accountService.addTime();
+        Date date=accountService.getNowTime();
+
         LambdaQueryWrapper<LoanRecord> loanRecordQueryWrapper = new QueryWrapper<LoanRecord>().lambda();
         loanRecordQueryWrapper.eq(LoanRecord::getStatus,0);
         List<LoanRecord> loanRecord=loanRecordMapper.selectList(loanRecordQueryWrapper);
@@ -194,6 +206,8 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
 
 
     public int updateLoanFine(Integer id,double fine){
+        if(fine<0)
+            return -1;
         UpdateWrapper<LoanRecord> loanRecordUpdateWrapper=new UpdateWrapper<>();
         loanRecordUpdateWrapper.eq("id",id);
         LoanRecord loanRecord=new LoanRecord();

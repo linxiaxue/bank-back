@@ -34,6 +34,6 @@ public interface LoanRecordService extends IService<LoanRecord> {
     Integer repay(Integer id,Double account);
 
     @Transactional
-    Integer updateDate(Date date);
+    Integer updateDate();
 
 }
