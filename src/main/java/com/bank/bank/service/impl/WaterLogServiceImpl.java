@@ -58,11 +58,9 @@ public class WaterLogServiceImpl extends ServiceImpl<WaterLogMapper, WaterLog> i
         waterLog.setAccountChange(accountChange);
         waterLog.setClientId(clientid);
         Date date=new Date();
-
+        //Tue Apr 06 17:44:42 CST 2021
         Date nowDate=accountService.getNowTime();
-        String time=nowDate.getYear()+" "+nowDate.getMonth()+" "+nowDate.getDate()+" "+
-                date.getHours()+" : "+date.getMinutes()+" : "+date.getSeconds();
-
+        String time=nowDate.toString().substring(0,11)+date.toString().substring(11);
         waterLog.setCreateTime(time);
         waterLog.setType(type);
         saveOrUpdate(waterLog);
