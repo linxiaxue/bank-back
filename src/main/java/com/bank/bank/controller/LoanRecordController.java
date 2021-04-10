@@ -91,13 +91,13 @@ public class LoanRecordController {
 
     /**
      * 更新新的一天
-     * @param
+     * @param date
      * @return
      */
-    @GetMapping( "/updateDate")
+    @PostMapping( "/updateDate")
     @ApiOperation(value = "更新到新的一天")
-    public ResponseEntity<Integer> updateDate(){
-        return ResponseEntity.ok(loanRecordService.updateDate());
+    public ResponseEntity<Integer> updateDate(@RequestParam("date")@ApiParam(value = "现在到时间 ")Date date){
+        return ResponseEntity.ok(loanRecordService.updateDate(date));
     }
 
 

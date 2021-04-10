@@ -163,9 +163,8 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
 
     }
     @Override
-    public Integer updateDate(){
-        accountService.addTime();
-        Date date=accountService.getNowTime();
+    public Integer updateDate(Date date){
+
 
         LambdaQueryWrapper<LoanRecord> loanRecordQueryWrapper = new QueryWrapper<LoanRecord>().lambda();
         loanRecordQueryWrapper.eq(LoanRecord::getStatus,0);
