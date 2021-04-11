@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author yuwen
@@ -68,6 +68,14 @@ public class LoanRecord implements Serializable {
      */
     @ApiModelProperty(value = "期数，可忽略")
     private Integer nper;
+
+    public Double getFine() {
+        return fine;
+    }
+
+    public void setFine(Double fine) {
+        this.fine = fine;
+    }
 
     /**
      * 罚金：0为无罚金或已还清
