@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
+import java.util.*;
 
 /**
  * <p>
@@ -198,18 +195,28 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         loanRecordQueryWrapper.eq(LoanRecord::getStatus,0);
         List<LoanRecord> loanRecord=loanRecordMapper.selectList(loanRecordQueryWrapper);
         SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-
+        Calendar cld = Calendar.getInstance();
+        cld.setTime(date);
+        cld.add(Calendar.DATE, -1);
+        Date dateNew = cld.getTime();
         for(LoanRecord loanRecord1:loanRecord){
             try {
                 Date dueDate = sdf1.parse(loanRecord1.getExpirationTime());
-                if(dueDate.before(date)){
+                if((dueDate.before(date)||dueDate==date)&&dateNew.before(dueDate)){
                     double fine=loanRecord1.getCurrentAccount()*0.05;
+                    updateLoanFine(loanRecord1.getId(),fine);
+                }
+                if(dueDate.before(date)){
+                    double fine=loanRecord1.getFine();
                     Account account=accountService.getAccountById(loanRecord1.getClientId());
                     if(account.getBalance()>=fine){
-                        accountService.reduceAccountBalance(loanRecord1.getClientId(),fine);
-                        String str="-"+fine;
-                        waterLogService.createWaterLog(account.getId(),str,2);
-                        updateLoanFine(loanRecord1.getId(),0);
+                        if(fine>0){
+                            accountService.reduceAccountBalance(loanRecord1.getClientId(),fine);
+                            String str="-"+fine;
+                            waterLogService.createWaterLog(account.getId(),str,2);
+                            updateLoanFine(loanRecord1.getId(),0);
+                        }
+                        
 
                         if(account.getBalance()-fine>=loanRecord1.getCurrentAccount()){
                             accountService.reduceAccountBalance(loanRecord1.getClientId(),loanRecord1.getCurrentAccount());
@@ -217,9 +224,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
                         }
 
                     }
-                    else{
-                        updateLoanFine(loanRecord1.getId(),fine);
-                    }
+
                 }
             }catch (Exception e){
                 System.out.println(e);
