@@ -181,6 +181,8 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
                         accountService.reduceAccountBalance(loanRecord1.getClientId(),fine);
                         String str="-"+fine;
                         waterLogService.createWaterLog(account.getId(),str,2);
+                        updateLoanFine(loanRecord1.getId(),0);
+
                         if(account.getBalance()-fine>=loanRecord1.getCurrentAccount()){
                             accountService.reduceAccountBalance(loanRecord1.getClientId(),loanRecord1.getCurrentAccount());
                             repayTotal(loanRecord1.getId());
