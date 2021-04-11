@@ -22,7 +22,7 @@ public interface WaterLogService extends IService<WaterLog> {
 
     List<WaterLog> getList(Integer clientId) throws ParseException;
 
-    List<WaterLog> findByWID(Integer clientId,Integer wid);
+    List<WaterLog> findByWID(Integer clientId,Integer wid) throws ParseException;
 
 
 }

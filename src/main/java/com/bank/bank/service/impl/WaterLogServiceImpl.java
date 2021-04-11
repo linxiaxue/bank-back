@@ -86,10 +86,18 @@ public class WaterLogServiceImpl extends ServiceImpl<WaterLogMapper, WaterLog> i
     }
 
     @Override
-    public List<WaterLog> findByWID(Integer clientId,Integer wid){
+    public List<WaterLog> findByWID(Integer clientId,Integer wid) throws ParseException {
         LambdaQueryWrapper<WaterLog> wrapper = new QueryWrapper<WaterLog>().lambda();
         wrapper.eq(WaterLog::getClientId,clientId);
         wrapper.eq(WaterLog::getId,wid);
-        return waterLogMapper.selectList(wrapper);
+        List<WaterLog> list = waterLogMapper.selectList(wrapper);
+        for(WaterLog log : list){
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date da = (Date) sdf.parse(log.getCreateTime().toString());
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createTime = sdf.format(da);
+            log.setCreateTime(createTime);
+        }
+        return list;
     }
 }
