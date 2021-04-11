@@ -7,6 +7,7 @@ import com.bank.bank.mapper.AccountMapper;
 import com.bank.bank.service.AccountService;
 import com.bank.bank.service.ClientProductService;
 import com.bank.bank.service.LoanRecordService;
+import com.bank.bank.service.WaterLogService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -14,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -33,6 +35,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
     @Autowired
     private ClientProductService clientProductService;
+
+    @Autowired
+    private WaterLogService waterLogService;
 
     @Autowired
     private AccountMapper accountMapper;
@@ -159,10 +164,11 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     }
 
     @Override
-    public String deposit(Integer id, Double money){
+    public String deposit(Integer id, Double money) throws ParseException {
         Account account = getById(id);
         account.setBalance(account.getBalance() + money);
         saveOrUpdate(account);
+        waterLogService.createWaterLog(id,"+" + money,0);
         return "存款成功";
     }
 

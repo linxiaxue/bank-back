@@ -11,6 +11,7 @@ import com.bank.bank.service.LoanRecordService;
 import com.bank.bank.service.WaterLogService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,39 +49,63 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
     private WaterLogService waterLogService;
 
     @Override
-    public List<LoanRecord> getByUserId(Integer id) {
+    public List<LoanRecord> getByUserId(Integer id) throws ParseException {
 
         LambdaQueryWrapper<LoanRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(LoanRecord::getClientId, id).eq(LoanRecord::getStatus,0);
-        return loanRecordMapper.selectList(wrapper);
+        List<LoanRecord> list = loanRecordMapper.selectList(wrapper);
+        for (LoanRecord record : list){
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date da = (Date) sdf.parse(record.getExpirationTime());
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String exTime = sdf.format(da);
+            record.setExpirationTime(exTime);
+            SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date da2 = (Date) sdf2.parse(record.getCreateTime());
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createTime = sdf.format(da2);
+            record.setCreateTime(createTime);
+        }
+        return list;
 
     }
 
     @Override
-    public LoanRecord getById(Integer id){
+    public LoanRecord getById(Integer id) throws ParseException {
         LambdaQueryWrapper<LoanRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(LoanRecord::getId,id);
-
-        return getOne(wrapper);
+        LoanRecord record = getOne(wrapper);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        Date da = (Date) sdf.parse(record.getExpirationTime());
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String exTime = sdf.format(da);
+        record.setExpirationTime(exTime);
+        SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        Date da2 = (Date) sdf2.parse(record.getCreateTime());
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String createTime = sdf.format(da2);
+        record.setCreateTime(createTime);
+        return record;
 
     }
 
     @Override
-    public Integer freeFine(Integer id){
+    public Integer freeFine(Integer id) throws ParseException {
         //查询id和罚金
 
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
-        if(loan1==null)
+        if(loan1==null) {
             return -1;
-
+        }
         Integer clientid=loan1.getClientId();
         Double fine=loan1.getFine();
         if(fine != null && fine > 0 ) {
 
             //更新
             loan1.setFine(0.0);
+            loan1.setClientId(clientid);
             saveOrUpdate(loan1);
             String str = "-" + fine;
             accountService.reduceAccountBalance(clientid,fine);
@@ -96,13 +122,14 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
     }
 
     @Override
-    public Integer repayTotal(Integer id){
+    public Integer repayTotal(Integer id) throws ParseException {
         //查询clientid和总金额
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
-        if(loan1==null)
+        if(loan1==null) {
             return -1;
+        }
         Double fine=loan1.getFine();
         if(fine==null||fine>0){
             return -1;
@@ -122,7 +149,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
     }
 
     @Override
-    public Integer repay(Integer id,Double account){
+    public Integer repay(Integer id,Double account) throws ParseException {
         if(account<0){
             return -1;
         }
@@ -130,8 +157,9 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         QueryWrapper<LoanRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
-        if(loan1==null)
+        if(loan1==null) {
             return -1;
+        }
         Double fine=loan1.getFine();
         if(fine==null||fine>0){
             return -1;

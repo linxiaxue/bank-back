@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class FinanceProductServiceImpl extends ServiceImpl<FinanceProductMapper,
     }
 
     @Override
-    public String buyPro(ClientProductRequestDto clientProductRequestDto){
+    public String buyPro(ClientProductRequestDto clientProductRequestDto) throws ParseException {
         String re = "";
 
         //要交罚金
@@ -99,7 +100,7 @@ public class FinanceProductServiceImpl extends ServiceImpl<FinanceProductMapper,
                 clientProduct.setPrincipal(clientProductRequestDto.getPrincipal() + clientProduct.getPrincipal());
                 clientProduct.setInterestRate(financeProduct.getInterestRate());
                 clientProduct.setType(financeProduct.getType());
-                clientProduct.setProfit(0.0);
+                clientProduct.setProfit(clientProduct.getProfit());
                 clientProductService.saveOrUpdate(clientProduct);
                 waterLogService.createWaterLog(clientProduct.getClientId(),"-"+clientProductRequestDto.getPrincipal(),3);
                 re = "购买成功";

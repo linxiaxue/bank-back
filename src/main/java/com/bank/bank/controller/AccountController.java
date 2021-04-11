@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 
 /**
  *
@@ -55,7 +56,7 @@ public class AccountController {
      */
     @GetMapping("/{id}/{money}")
     @ApiOperation(value = "存款")
-    public ResponseEntity<String> deposit(@PathVariable(value = "id") Integer id,@PathVariable(value = "money") Double money){
+    public ResponseEntity<String> deposit(@PathVariable(value = "id") Integer id,@PathVariable(value = "money") Double money) throws ParseException {
         return ResponseEntity.ok(accountService.deposit(id,money));
     }
 

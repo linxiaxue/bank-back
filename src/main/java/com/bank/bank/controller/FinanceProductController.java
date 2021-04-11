@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public class FinanceProductController {
      */
     @PostMapping("/buyProduct")
     @ApiOperation(value = "用户购买理财产品")
-    public ResponseEntity<String> buyPro(@RequestBody ClientProductRequestDto clientProductRequestDto){
+    public ResponseEntity<String> buyPro(@RequestBody ClientProductRequestDto clientProductRequestDto) throws ParseException {
         return ResponseEntity.ok(financeProductService.buyPro(clientProductRequestDto));
 
     }

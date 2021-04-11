@@ -4,6 +4,7 @@ import com.bank.bank.dto.ClientProductResponseDto;
 import com.bank.bank.entity.ClientProduct;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -19,5 +20,5 @@ public interface ClientProductService extends IService<ClientProduct> {
     void computeBenefit();
 
 
-    List<ClientProductResponseDto> getClientPros(Integer cid);
+    List<ClientProductResponseDto> getClientPros(Integer cid) throws ParseException;
 }

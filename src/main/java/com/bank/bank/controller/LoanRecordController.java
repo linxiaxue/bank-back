@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class LoanRecordController {
      */
     @GetMapping( "/user/{id}")
     @ApiOperation(value = "按照用户id查询对应的贷款记录")
-    public ResponseEntity<List<LoanRecord>> findByUserID(@PathVariable(value = "id")@ApiParam(value = "用户id") Integer id){
+    public ResponseEntity<List<LoanRecord>> findByUserID(@PathVariable(value = "id")@ApiParam(value = "用户id") Integer id) throws ParseException {
         return ResponseEntity.ok(loanRecordService.getByUserId(id));
     }
     /**
@@ -52,7 +53,7 @@ public class LoanRecordController {
      */
     @GetMapping( "/loan/{id}")
     @ApiOperation(value = "按照贷款id查询对应的贷款记录")
-    public ResponseEntity<LoanRecord> findByID(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
+    public ResponseEntity<LoanRecord> findByID(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id) throws ParseException {
         return ResponseEntity.ok(loanRecordService.getById(id));
     }
     /**
@@ -62,7 +63,7 @@ public class LoanRecordController {
      */
     @GetMapping( "/fine/{id}")
     @ApiOperation(value = "按照贷款id缴清罚金")
-    public ResponseEntity<String> freeFine(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
+    public ResponseEntity<String> freeFine(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id) throws ParseException {
         return ResponseEntity.ok(loanRecordService.freeFine(id) > 0 ? "罚金已缴清":"当前无罚金");
     }
 
@@ -73,7 +74,7 @@ public class LoanRecordController {
      */
     @GetMapping( "/repay/{id}")
     @ApiOperation(value = "按照贷款id全部还款")
-    public ResponseEntity<Integer> repayTotoal(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id){
+    public ResponseEntity<Integer> repayTotoal(@PathVariable(value = "id")@ApiParam(value = "贷款id") Integer id) throws ParseException {
         return ResponseEntity.ok(loanRecordService.repayTotal(id));
     }
 
@@ -85,7 +86,7 @@ public class LoanRecordController {
 
     @PostMapping( "/repay")
     @ApiOperation(value = "按照贷款id部分还款")
-    public ResponseEntity<Integer> repayTotoal(@RequestParam("id")@ApiParam(value = "贷款id") Integer id,@RequestParam("account") @ApiParam(value = "还款金额")Double account ){
+    public ResponseEntity<Integer> repayTotoal(@RequestParam("id")@ApiParam(value = "贷款id") Integer id,@RequestParam("account") @ApiParam(value = "还款金额")Double account ) throws ParseException {
         return ResponseEntity.ok(loanRecordService.repay(id,account));
     }
 

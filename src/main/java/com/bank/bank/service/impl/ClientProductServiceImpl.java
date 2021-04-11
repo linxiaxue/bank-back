@@ -10,8 +10,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * <p>
@@ -52,14 +56,18 @@ public class ClientProductServiceImpl extends ServiceImpl<ClientProductMapper, C
     }
 
     @Override
-    public List<ClientProductResponseDto> getClientPros(Integer cid){
+    public List<ClientProductResponseDto> getClientPros(Integer cid) throws ParseException {
         LambdaQueryWrapper<ClientProduct> wrapper = new QueryWrapper<ClientProduct>().lambda();
         wrapper.eq(ClientProduct::getClientId,cid);
         List<ClientProduct> list = getBaseMapper().selectList(wrapper);
         List<ClientProductResponseDto> re = new ArrayList<>();
         for (ClientProduct clientProduct : list){
             ClientProductResponseDto dto = new ClientProductResponseDto();
-            dto.setBuyTime(clientProduct.getBuyTime());
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date da = (Date) sdf.parse(clientProduct.getBuyTime());
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String buytime = sdf.format(da);
+            dto.setBuyTime(buytime);
             dto.setClientId(clientProduct.getClientId());
             dto.setFpdId(clientProduct.getFpdId());
             dto.setInterestRate(clientProduct.getInterestRate());
