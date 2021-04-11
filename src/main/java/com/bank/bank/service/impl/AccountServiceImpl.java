@@ -2,12 +2,11 @@ package com.bank.bank.service.impl;
 
 import com.bank.bank.dto.AccountDto;
 import com.bank.bank.entity.Account;
+import com.bank.bank.entity.FinanceProduct;
 import com.bank.bank.exception.AccountNotExist;
 import com.bank.bank.mapper.AccountMapper;
-import com.bank.bank.service.AccountService;
-import com.bank.bank.service.ClientProductService;
-import com.bank.bank.service.LoanRecordService;
-import com.bank.bank.service.WaterLogService;
+import com.bank.bank.mapper.FinanceProductMapper;
+import com.bank.bank.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -41,6 +41,12 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
     @Autowired
     private AccountMapper accountMapper;
+
+    @Autowired
+    private FinanceProductMapper financeProductMapper;
+
+    @Autowired
+    private FinanceProductService financeProductService;
 
     @Override
     public Account getByIDN(Long idn){
@@ -152,6 +158,18 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         Date dateNew = cld.getTime();
         account1.setNowDate(dateNew);
         saveOrUpdate(account1);
+        List<FinanceProduct> list = financeProductService.getProducts();
+        for (FinanceProduct financeProduct : list){
+            if (financeProduct.getType() != 0){
+                double random = Math.random() * 0.1;
+                if( Math.round(Math.random())== 1){
+                    financeProduct.setInterestRate(random);
+                }else {
+                    financeProduct.setInterestRate(0 - random);
+                }
+                financeProductMapper.updateById(financeProduct);
+            }
+        }
 
         if(loanRecordService.updateDate(dateNew) == -1){
             throw new RuntimeException();
