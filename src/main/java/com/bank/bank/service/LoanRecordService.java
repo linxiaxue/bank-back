@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.models.auth.In;
 
 import javax.transaction.Transactional;
+import java.text.ParseException;
 import java.util.Date;
 
 import java.util.List;
@@ -20,18 +21,18 @@ import java.util.List;
  */
 public interface LoanRecordService extends IService<LoanRecord> {
 
-    List<LoanRecord> getByUserId(Integer id);
+    List<LoanRecord> getByUserId(Integer id) throws ParseException;
 
-    LoanRecord getById(Integer id);
-
-    @Transactional
-    Integer freeFine(Integer id);
+    LoanRecord getById(Integer id) throws ParseException;
 
     @Transactional
-    Integer repayTotal(Integer id);
+    Integer freeFine(Integer id) throws ParseException;
 
     @Transactional
-    Integer repay(Integer id,Double account);
+    Integer repayTotal(Integer id) throws ParseException;
+
+    @Transactional
+    Integer repay(Integer id,Double account) throws ParseException;
 
     @Transactional
     Integer updateDate(Date date);

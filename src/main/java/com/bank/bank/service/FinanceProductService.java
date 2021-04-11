@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.transaction.Transactional;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public interface FinanceProductService extends IService<FinanceProduct> {
     List<FinanceProduct> getProById(Integer clientId);
 
     @Transactional
-    String buyPro(ClientProductRequestDto clientProductRequestDto);
+    String buyPro(ClientProductRequestDto clientProductRequestDto) throws ParseException;
 
 
 }

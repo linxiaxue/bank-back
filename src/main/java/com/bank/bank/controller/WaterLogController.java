@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class WaterLogController {
      */
     @GetMapping("/{id}")
     @ApiOperation("查询账户流水")
-    public List<WaterLog> getList(@PathVariable(value = "id")@ApiParam(value = "账户id" ) Integer id){
+    public List<WaterLog> getList(@PathVariable(value = "id")@ApiParam(value = "账户id" ) Integer id) throws ParseException {
         return waterLogService.getList(id);
     }
 

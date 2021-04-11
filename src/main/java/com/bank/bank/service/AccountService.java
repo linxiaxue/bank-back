@@ -5,6 +5,7 @@ import com.bank.bank.entity.Account;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -36,5 +37,5 @@ public interface AccountService extends IService<Account> {
     String addTime();
 
     @Transactional(rollbackFor = Exception.class)
-    String deposit(Integer id,Double money);
+    String deposit(Integer id,Double money) throws ParseException;
 }

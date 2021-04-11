@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.data.domain.PageRequest;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public interface WaterLogService extends IService<WaterLog> {
 
-    void createWaterLog(Integer clientid, String accountChange, Integer type);
+    void createWaterLog(Integer clientid, String accountChange, Integer type) throws ParseException;
 
-    List<WaterLog> getList(Integer clientId);
+    List<WaterLog> getList(Integer clientId) throws ParseException;
 
     List<WaterLog> findByWID(Integer clientId,Integer wid);
 

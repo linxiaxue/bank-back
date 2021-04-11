@@ -16,8 +16,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * <p>
@@ -53,25 +56,33 @@ public class WaterLogServiceImpl extends ServiceImpl<WaterLogMapper, WaterLog> i
 //    }
 
     @Override
-    public void createWaterLog(Integer clientid, String accountChange, Integer type){
+    public void createWaterLog(Integer clientid, String accountChange, Integer type) throws ParseException {
         WaterLog waterLog=new WaterLog();
         waterLog.setAccountChange(accountChange);
         waterLog.setClientId(clientid);
         Date date=new Date();
         //Tue Apr 06 17:44:42 CST 2021
         Date nowDate=accountService.getNowTime();
-        String time=nowDate.toString().substring(0,11)+date.toString().substring(11);
-        waterLog.setCreateTime(time);
+
+        waterLog.setCreateTime(nowDate.toString());
         waterLog.setType(type);
         saveOrUpdate(waterLog);
 
     }
 
     @Override
-    public List<WaterLog> getList(Integer clientId){
+    public List<WaterLog> getList(Integer clientId) throws ParseException {
         LambdaQueryWrapper<WaterLog> wrapper = new QueryWrapper<WaterLog>().lambda();
         wrapper.eq(WaterLog::getClientId,clientId);
-        return waterLogMapper.selectList(wrapper);
+        List<WaterLog> list = waterLogMapper.selectList(wrapper);
+        for(WaterLog log : list){
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date da = (Date) sdf.parse(log.getCreateTime().toString());
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createTime = sdf.format(da);
+            log.setCreateTime(createTime);
+        }
+        return list;
     }
 
     @Override

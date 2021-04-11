@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
  */
 @TableName("loan_record")
 @ApiModel(value = "贷款记录")
+@Data
 public class LoanRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -73,69 +75,7 @@ public class LoanRecord implements Serializable {
     @ApiModelProperty(value = "罚金：0为无罚金或已还清")
     private Double fine;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-    public String getExpirationTime() {
-        return expirationTime;
-    }
-
-    public void setExpirationTime(String expirationTime) {
-        this.expirationTime = expirationTime;
-    }
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-    public Integer getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(Integer clientId) {
-        this.clientId = clientId;
-    }
-    public Double getTotalAccount() {
-        return totalAccount;
-    }
-
-    public void setTotalAccount(Double totalAccount) {
-        this.totalAccount = totalAccount;
-    }
-    public Double getCurrentAccount() {
-        return currentAccount;
-    }
-
-    public void setCurrentAccount(Double currentAccount) {
-        this.currentAccount = currentAccount;
-    }
-    public Integer getNper() {
-        return nper;
-    }
-
-    public void setNper(Integer nper) {
-        this.nper = nper;
-    }
-    public Double getFine() {
-        return fine;
-    }
-
-    public void setFine(Double fine) {
-        this.fine = fine;
-    }
 
     @Override
     public String toString() {
