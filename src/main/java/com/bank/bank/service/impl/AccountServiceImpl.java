@@ -81,7 +81,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         account.setBalance(0.0);
         account.setCreditRate(1);
         account.setLoanAmount(0.0);
-        account.setName(account.getName());
+        account.setName(accountDto.getName());
         saveOrUpdate(account);
     }
 
