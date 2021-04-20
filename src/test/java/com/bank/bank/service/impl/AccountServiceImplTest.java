@@ -43,10 +43,16 @@ class AccountServiceImplTest {
 
     @Test
     void getAccountById() {
+
+
+        Account account = accountService.getAccountById(1);
+        assertEquals("test",account.getName());
+
     }
 
     @Test
     void create() {
+
     }
 
     @Test

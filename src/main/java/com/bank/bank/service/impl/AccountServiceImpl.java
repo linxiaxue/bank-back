@@ -107,7 +107,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
             account.setCreditRate(3);
         }
 
-        int ret=accountMapper.update(account,accountUpdateWrapper);
+        int ret = accountMapper.update(account,accountUpdateWrapper);
         return ret;
     }
 
