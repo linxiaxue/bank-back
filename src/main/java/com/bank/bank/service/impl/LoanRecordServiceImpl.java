@@ -94,7 +94,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         queryWrapper.eq("id",id);
         LoanRecord loan1 = loanRecordMapper.selectOne(queryWrapper);
         if(loan1==null) {
-            return -1;
+            return 0;
         }
         Integer clientid=loan1.getClientId();
         Double fine=loan1.getFine();
