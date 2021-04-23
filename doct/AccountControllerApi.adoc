@@ -1,0 +1,60 @@
+
+== &lt;p&gt; 前端控制器&lt;/p&gt;
+=== 
+*URL:* `/bank/account/{idn}`
+
+*Type:* `GET`
+
+*Author:* yuwen
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=utf-8`
+
+*Description:* 
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Description|Required|Since
+|idn|int64|No comments found.|true|-
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -i /bank/account/154
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|id|int32|No comments found.|-
+|idNumber|int64|身份证号|-
+|balance|double|余额|-
+|creditRate|int32|信用等级|-
+|loanAmount|double|贷款金额|-
+|name|string|No comments found.|-
+|age|int32|No comments found.|-
+|====================
+
+
+*Response-example:*
+----
+{
+	"id": 960,
+	"idNumber": 305,
+	"balance": 28.30,
+	"creditRate": 683,
+	"loanAmount": 40.39,
+	"name": "峻熙.邓",
+	"age": 56
+}
+----
+
