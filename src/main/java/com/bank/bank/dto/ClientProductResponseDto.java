@@ -67,4 +67,83 @@ public class ClientProductResponseDto {
     private String fpdName;
 
 
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public Integer getFpdId() {
+        return fpdId;
+    }
+
+    public void setFpdId(Integer fpdId) {
+        this.fpdId = fpdId;
+    }
+
+    public String getBuyTime() {
+        return buyTime;
+    }
+
+    public void setBuyTime(String buyTime) {
+        this.buyTime = buyTime;
+    }
+
+    public Double getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(Double principal) {
+        this.principal = principal;
+    }
+
+    public Double getHold() {
+        return hold;
+    }
+
+    public void setHold(Double hold) {
+        this.hold = hold;
+    }
+
+    public Double getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(Double interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public Double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Double profit) {
+        this.profit = profit;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(String expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public String getFpdName() {
+        return fpdName;
+    }
+
+    public void setFpdName(String fpdName) {
+        this.fpdName = fpdName;
+    }
 }

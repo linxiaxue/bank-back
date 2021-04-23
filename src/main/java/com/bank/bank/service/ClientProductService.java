@@ -19,6 +19,6 @@ public interface ClientProductService extends IService<ClientProduct> {
 
     void computeBenefit();
 
-
     List<ClientProductResponseDto> getClientPros(Integer cid) throws ParseException;
+
 }

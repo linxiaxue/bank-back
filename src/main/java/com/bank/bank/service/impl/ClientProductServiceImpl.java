@@ -80,4 +80,13 @@ public class ClientProductServiceImpl extends ServiceImpl<ClientProductMapper, C
         return re;
 
     }
+
+
+    public ClientProductMapper getClientProductMapper() {
+        return clientProductMapper;
+    }
+
+    public void setClientProductMapper(ClientProductMapper clientProductMapper) {
+        this.clientProductMapper = clientProductMapper;
+    }
 }

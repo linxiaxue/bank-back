@@ -96,4 +96,9 @@ public class FinanceProduct implements Serializable {
             ", interestRate=" + interestRate +
         "}";
     }
+
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 }

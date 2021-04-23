@@ -25,4 +25,28 @@ public class ClientProductRequestDto {
      */
     @ApiModelProperty(value = "本金")
     private Double principal;
+
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public Integer getFpdId() {
+        return fpdId;
+    }
+
+    public void setFpdId(Integer fpdId) {
+        this.fpdId = fpdId;
+    }
+
+    public Double getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(Double principal) {
+        this.principal = principal;
+    }
 }

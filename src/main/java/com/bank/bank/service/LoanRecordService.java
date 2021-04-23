@@ -37,4 +37,7 @@ public interface LoanRecordService extends IService<LoanRecord> {
     @Transactional
     Integer updateDate(Date date);
 
+    @Transactional
+    int updateLoanFine(Integer id,double fine);
+
 }

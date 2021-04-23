@@ -99,4 +99,73 @@ public class LoanRecord implements Serializable {
             ", fine=" + fine +
         "}";
     }
+
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(String expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public Double getTotalAccount() {
+        return totalAccount;
+    }
+
+    public void setTotalAccount(Double totalAccount) {
+        this.totalAccount = totalAccount;
+    }
+
+    public Double getCurrentAccount() {
+        return currentAccount;
+    }
+
+    public void setCurrentAccount(Double currentAccount) {
+        this.currentAccount = currentAccount;
+    }
+
+    public Integer getNper() {
+        return nper;
+    }
+
+    public void setNper(Integer nper) {
+        this.nper = nper;
+    }
 }

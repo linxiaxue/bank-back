@@ -45,5 +45,51 @@ public class AccountDto {
     @ApiModelProperty(value = "年龄")
     private int age;
 
+    public Long getIdNumber() {
+        return idNumber;
+    }
 
+    public void setIdNumber(Long idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public Integer getCreditRate() {
+        return creditRate;
+    }
+
+    public void setCreditRate(Integer creditRate) {
+        this.creditRate = creditRate;
+    }
+
+    public Double getLoanAmount() {
+        return loanAmount;
+    }
+
+    public void setLoanAmount(Double loanAmount) {
+        this.loanAmount = loanAmount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 }
