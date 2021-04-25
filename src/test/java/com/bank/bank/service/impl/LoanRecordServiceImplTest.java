@@ -115,6 +115,8 @@ class LoanRecordServiceImplTest {
         int id1 = loanRecord2.getId();
         assertEquals(0,loanRecordService.freeFine(id1));
 
+
+
         LoanRecord loanRecord3 = new LoanRecord();
         loanRecord3.setCreateTime("Sat Jul 06 04:19:19 UTC 2021");
         loanRecord3.setExpirationTime("Mon Jul 08 04:19:19 UTC 2021");
@@ -126,6 +128,8 @@ class LoanRecordServiceImplTest {
         loanRecordService.save(loanRecord3);
         int id2 = loanRecord3.getId();
         assertEquals(-1,loanRecordService.freeFine(id2));
+
+
 
 
     }
@@ -233,6 +237,26 @@ class LoanRecordServiceImplTest {
 
 
     }
+    @Test
+    void repay4() throws Exception{
+        LoanRecord loanRecord = new LoanRecord();
+        loanRecord.setCreateTime("Sat Jul 06 04:19:19 UTC 2021");
+        loanRecord.setExpirationTime("Mon Jul 08 04:19:19 UTC 2021");
+        loanRecord.setStatus(0);
+        loanRecord.setClientId(2);
+        loanRecord.setTotalAccount(20.00);
+        loanRecord.setCurrentAccount(20.00);
+        loanRecord.setFine(null);
+        loanRecordService.save(loanRecord);
+        int id = loanRecord.getId();
+
+
+        assertEquals(-1,loanRecordService.repay(id,11.00));
+
+
+
+    }
+
 
     @Test
     void updateDate() throws Exception {

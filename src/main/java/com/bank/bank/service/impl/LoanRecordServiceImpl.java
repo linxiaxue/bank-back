@@ -128,7 +128,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
             return -1;
         }
         Double fine=loan1.getFine();
-        if(fine==null||fine>0){
+        if(fine>0){
             return -1;
         }
         Integer clientid=loan1.getClientId();
@@ -158,7 +158,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
             return -1;
         }
         Double fine=loan1.getFine();
-        if(fine==null||fine>0){
+        if(fine>0){
             return -1;
         }
 
@@ -176,14 +176,14 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         UpdateWrapper<LoanRecord> loan=new UpdateWrapper<>();
         loan.eq("id",id);
         int ret=loanRecordMapper.update(loanRecord,loan);
-        if(ret>0){
 
-            String str="-"+account;
 
-            waterLogService.createWaterLog(clientid,str,1);
-            accountService.reduceAccountLoad(clientid,account);
+        String str="-"+account;
 
-        }
+        waterLogService.createWaterLog(clientid,str,1);
+        accountService.reduceAccountLoad(clientid,account);
+
+
         return ret;
 
     }
@@ -216,7 +216,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
                             waterLogService.createWaterLog(account.getId(),str,2);
                             updateLoanFine(loanRecord1.getId(),0);
                         }
-                        
+
 
                         if(account.getBalance()-fine>=loanRecord1.getCurrentAccount()){
                             accountService.reduceAccountBalance(loanRecord1.getClientId(),loanRecord1.getCurrentAccount());
