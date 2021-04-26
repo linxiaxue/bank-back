@@ -237,25 +237,7 @@ class LoanRecordServiceImplTest {
 
 
     }
-    @Test
-    void repay4() throws Exception{
-        LoanRecord loanRecord = new LoanRecord();
-        loanRecord.setCreateTime("Sat Jul 06 04:19:19 UTC 2021");
-        loanRecord.setExpirationTime("Mon Jul 08 04:19:19 UTC 2021");
-        loanRecord.setStatus(0);
-        loanRecord.setClientId(2);
-        loanRecord.setTotalAccount(20.00);
-        loanRecord.setCurrentAccount(20.00);
-        loanRecord.setFine(null);
-        loanRecordService.save(loanRecord);
-        int id = loanRecord.getId();
 
-
-        assertEquals(-1,loanRecordService.repay(id,11.00));
-
-
-
-    }
 
 
     @Test
@@ -355,6 +337,109 @@ class LoanRecordServiceImplTest {
 
         assertEquals(-1,loanRecordService.updateDate(d1));
 
+
+    }
+    @Test
+    void updateDate5() throws Exception {
+        LoanRecord loanRecord = new LoanRecord();
+        loanRecord.setCreateTime("Sat Jul 06 04:19:19 UTC 2021");
+        loanRecord.setExpirationTime("Mon Jul 08 04:19:19 UTC 2021");
+        loanRecord.setStatus(0);
+        loanRecord.setClientId(2);
+        loanRecord.setTotalAccount(20.00);
+        loanRecord.setCurrentAccount(20.00);
+        loanRecord.setFine(0.00);
+        loanRecordService.save(loanRecord);
+        int id = loanRecord.getId();
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        //Date d1 = sdf1.parse("Wed Jul 10 04:19:19 UTC 2021");
+
+        Date d2 = sdf1.parse("Mon Jul 09 04:19:20 UTC 2021");
+
+        loanRecordService.updateDate(d2);
+
+        LoanRecord loanRecord1 = loanRecordService.getById(id);
+
+        assertEquals(0.00,loanRecord1.getCurrentAccount());
+
+
+
+    }
+    @Test
+    void updateDate6() throws Exception {
+        LoanRecord loanRecord = new LoanRecord();
+        loanRecord.setCreateTime("Sat Jul 06 04:19:19 UTC 2021");
+        loanRecord.setExpirationTime("Mon Jul 08 04:19:19 UTC 2021");
+        loanRecord.setStatus(0);
+        loanRecord.setClientId(2);
+        loanRecord.setTotalAccount(20.00);
+        loanRecord.setCurrentAccount(20.00);
+        loanRecord.setFine(0.00);
+        loanRecordService.save(loanRecord);
+        int id = loanRecord.getId();
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        //Date d1 = sdf1.parse("Wed Jul 10 04:19:19 UTC 2021");
+
+        Date d2 = sdf1.parse("Mon Jul 07 04:19:20 UTC 2021");
+
+        loanRecordService.updateDate(d2);
+
+        LoanRecord loanRecord1 = loanRecordService.getById(id);
+
+        assertEquals(20.00,loanRecord1.getCurrentAccount());
+
+
+
+    }
+    @Test
+    void updateDate7() throws Exception {
+        LoanRecord loanRecord = new LoanRecord();
+        loanRecord.setCreateTime("Sat Jul 06 04:19:19 UTC 2021");
+        loanRecord.setExpirationTime("Mon Jul 08 04:19:19 UTC 2021");
+        loanRecord.setStatus(0);
+        loanRecord.setClientId(2);
+
+        loanRecord.setTotalAccount(1000200.00);
+        loanRecord.setCurrentAccount(1000200.00);
+        loanRecord.setFine(1000001.00);
+        loanRecordService.save(loanRecord);
+        int id = loanRecord.getId();
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        Date d1 = sdf1.parse("Wed Jul 10 04:19:19 UTC 2021");
+
+        loanRecordService.updateDate(d1);
+
+        LoanRecord loanRecord1 = loanRecordService.getById(id);
+
+        assertEquals(1000200.00,loanRecord1.getCurrentAccount());
+
+    }
+
+    @Test
+    void updateDate8() throws Exception {
+        accountService.getAccountById(2).setBalance(10.00);
+        LoanRecord loanRecord = new LoanRecord();
+        loanRecord.setCreateTime("Sat Jul 06 04:19:19 UTC 2021");
+        loanRecord.setExpirationTime("Mon Jul 08 04:19:19 UTC 2021");
+        loanRecord.setStatus(0);
+        loanRecord.setClientId(2);
+        loanRecord.setTotalAccount(1000200.00);
+        loanRecord.setCurrentAccount(1000200.00);
+        loanRecord.setFine(0.00);
+        loanRecordService.save(loanRecord);
+        int id = loanRecord.getId();
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        Date d1 = sdf1.parse("Wed Jul 10 04:19:19 UTC 2021");
+
+        loanRecordService.updateDate(d1);
+
+        LoanRecord loanRecord1 = loanRecordService.getById(id);
+
+        assertEquals(1000200.00,loanRecord1.getCurrentAccount());
 
     }
 

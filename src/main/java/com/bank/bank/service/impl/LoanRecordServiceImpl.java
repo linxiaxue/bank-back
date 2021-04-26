@@ -98,7 +98,7 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         }
         Integer clientid=loan1.getClientId();
         Double fine=loan1.getFine();
-        if(fine != null && fine > 0 ) {
+        if( fine > 0 ) {
 
             //更新
             loan1.setFine(0.0);
@@ -202,14 +202,15 @@ public class LoanRecordServiceImpl extends ServiceImpl<LoanRecordMapper, LoanRec
         for(LoanRecord loanRecord1:loanRecord){
             try {
                 Date dueDate = sdf1.parse(loanRecord1.getExpirationTime());
-                if((dueDate.before(date)||dueDate==date)&&dateNew.before(dueDate)){
+                if((!dueDate.after(date)&&dateNew.before(dueDate))){
                     double fine=loanRecord1.getCurrentAccount()*0.05;
                     updateLoanFine(loanRecord1.getId(),fine);
                 }
-                if(dueDate.before(date)){
+                if(!dueDate.after(date)){
                     double fine=loanRecord1.getFine();
                     Account account=accountService.getAccountById(loanRecord1.getClientId());
                     if(account.getBalance()>=fine){
+                        //System.out.println(account.getBalance());
                         if(fine>0){
                             accountService.reduceAccountBalance(loanRecord1.getClientId(),fine);
                             String str="-"+fine;
